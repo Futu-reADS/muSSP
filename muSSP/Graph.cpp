@@ -47,6 +47,7 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
     ancestors_descendants.resize(num_nodes);
 
     time_test.resize(100, 0);
+    edge_tail_head.reserve(reserve_size);
 }
 
 Node &Graph::get_node(int node_id) {
@@ -61,6 +62,11 @@ void Graph::add_edge(int tail_id, int head_id, int edge_id, double weight) {
     // To format results into direct/reverse assignment
     node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
     node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
+
+    if (edge_tail_head.size() >= reserve_size) {
+      reserve_size *= 2;
+      edge_tail_head.reserve(reserve_size);
+    }
     edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
 
     if (false) {

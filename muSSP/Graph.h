@@ -25,6 +25,7 @@ public:
         int sink_id_ = 0;
         double en_weight_ = 0;
         double ex_weight_ = 0;
+        int reserve_size = 256;
 
         std::vector<long double> time_test;
 
