@@ -22,26 +22,27 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
   for (int i = 0; i < num_nodes; i++) {  // indeed this is not needed
     V_[i].price = 0;
   }
-    parent_node_id.assign(num_nodes, 0);
-    ancestor_node_id.assign(num_nodes, 0);
-    distance2src.assign(num_nodes, MUSSP_FINF);
-    std::cout << "initializer3" << num_edges << std::endl;
-    sink_info = std::make_unique<Sink>(num_nodes, ex_weight);
+  std::cout << "initializer3" << num_edges << std::endl;
+  parent_node_id.assign(num_nodes, 0);
+  ancestor_node_id.assign(num_nodes, 0);
+  distance2src.assign(num_nodes, MUSSP_FINF);
+  std::cout << "initializer4" << num_edges << std::endl;
+  sink_info = std::make_unique<Sink>(num_nodes, ex_weight);
 
-    std::cout << "initializer4" << num_edges << std::endl;
+  std::cout << "initializer5" << num_edges << std::endl;
 
-    node_in_visited.assign(num_edges, 0);
+  node_in_visited.assign(num_edges, 0);
 
-    std::cout << "initializer5" << num_edges << std::endl;
+  std::cout << "initializer6" << num_edges << std::endl;
 
-    // data save ancestor information
-    ancestor_ssd.assign(num_nodes, MUSSP_FINF);
-    ancestors_descendants.resize(num_nodes);
+  // data save ancestor information
+  ancestor_ssd.assign(num_nodes, MUSSP_FINF);
+  ancestors_descendants.resize(num_nodes);
 
-    std::cout << "edge_tail_head" << num_edges << std::endl;
-    edge_tail_head.assign(num_edges, std::make_pair(0.0, 0.0));
+  std::cout << "edge_tail_head" << num_edges << std::endl;
+  edge_tail_head.assign(num_edges, std::make_pair(0.0, 0.0));
 
-    std::cout << "Graph initializer end" << std::endl;
+  std::cout << "Graph initializer end" << std::endl;
 }
 
 Node &Graph::get_node(int node_id) {
