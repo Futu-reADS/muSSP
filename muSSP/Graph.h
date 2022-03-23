@@ -26,8 +26,7 @@ public:
         double en_weight_ = 0;
         double ex_weight_ = 0;
 
-        std::vector<Node> V_; // save all nodes in the graph (precursor/successor/edge idx)
-        std::vector<double> edge_weights;
+        std::vector<Node> V_;  // save all nodes in the graph (precursor/successor/edge idx)
         static inline size_t node_key(int i,int j)
         {
             return (size_t) i << 32 | (unsigned int) j;

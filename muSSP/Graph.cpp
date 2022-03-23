@@ -3,13 +3,7 @@
 /****shared macros****/
 #define MUSSP_MAX(x, y) ( ( (x) > (y) ) ?  x : y )
 #define MUSSP_MIN(x, y) ( ( (x) < (y) ) ? x : y )
-#define MUSSP_ABS(x) ( ( (x) < 0 ) ? -x : x )
-#define REDUCED_EDGE_WEIGHTS(i, j, e) {\
-    edge_weights[e] += distance2src[i];\
-    edge_weights[e] -= distance2src[j];\
-}\
-
-
+#define MUSSP_ABS(x) (((x) < 0) ? -x : x)
 
 Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_weight, double ex_weight) {
 
@@ -60,23 +54,6 @@ void Graph::add_edge(int tail_id, int head_id, int edge_id, double weight) {
     node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
     node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
     edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
-
-    if (false) {
-        /******
-         * for results validation only, no need to use in real application
-         * ********/
-        edge_weights.push_back(weight);
-        //// there will be no collisions for insertion, so complexity is O(1)
-        node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
-        node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
-
-        //// for results validation
-        edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
-        edge_org_weights.push_back(weight);
-
-        if (static_cast<int>(edge_weights.size()) - 1 != edge_id)
-            std::cout << "we got wrong edge number" << std::endl;
-    }
 }
 
 
