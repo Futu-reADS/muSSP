@@ -24,17 +24,7 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
     distance2src.assign(num_nodes, MUSSP_FINF);
     sink_info = std::make_unique<Sink>(num_nodes, ex_weight);
 
-    node_visited.assign(num_nodes, false);
-    // this is used after building sst, so most nodes are visited already
-    /**** 0: visited,
-     * 1: not visited but in waitinglist,
-     * 2: not visited but not in waitinglist,
-     * 3: not visited and freshly labelled
-     * 4: not visited and possibly will never be used
-     * -1: not visitetd and permanently never be used
-    *****/
     node_in_visited.assign(num_edges, 0);
-    edge_visited.assign(num_edges, false);
 
     // data save ancestor information
     ancestor_ssd.assign(num_nodes, MUSSP_FINF);

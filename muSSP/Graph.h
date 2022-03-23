@@ -40,7 +40,6 @@ public:
         std::vector<double> edge_org_weights;
         long upt_node_num = 0;
         //
-        std::vector<bool> node_visited, edge_visited;
         std::vector<int> node_in_visited;
         std::vector<int> parent_node_id;
         std::vector<int> ancestor_node_id;
