@@ -50,7 +50,7 @@ void Graph::add_edge(int tail_id, int head_id, int edge_id, double weight) {
   // To format results into direct/reverse assignment
   node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
   node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
-  if (edge_tail_head.size() < edge_tail_head_index) {
+  if (edge_tail_head.size() > edge_tail_head_index) {
     std::cout << "edge input" << std::endl;
     edge_tail_head.at(edge_tail_head_index) = std::make_pair(tail_id, head_id);
   } else {
