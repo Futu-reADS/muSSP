@@ -5,7 +5,9 @@
 //    return node_id;
 //}
 
-Node::Node(const Node & node) noexcept
+Node::~Node() {}
+
+Node::Node(const Node & node)
 : precursor_idx(node.precursor_idx),
   precursor_edges_idx(node.precursor_edges_idx),
   precursor_edges_weights(node.precursor_edges_weights),

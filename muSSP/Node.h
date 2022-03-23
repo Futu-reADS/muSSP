@@ -5,6 +5,7 @@ class Node
 {
 public:
     Node() = default;
+    ~Node();
     // copy constructor
     Node(const Node & node);
 
