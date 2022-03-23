@@ -119,7 +119,7 @@ Graph * init_from_cost_mat(const std::vector<std::vector<double>> & cost)
   double en_weight = 0;
   double ex_weight = 0;
 
-  Graph * resG = new Graph(n, m, 0, n - 1, en_weight, ex_weight);
+  auto resG = new Graph(n, m, 0, n - 1, en_weight, ex_weight);
   int edge_id = 0;
 
   // Helper function to add an edge
@@ -254,7 +254,7 @@ int solve_muSSP(
   clock_t t_start = clock();
 
   // std::string inFileName = (argc > 1) ? argv[1] : "/home/congchao/Desktop/dev/muSSP/input_117982_193870.txt";
-  std::shared_ptr<Graph> org_graph = std::make_shared<Graph>(init_from_cost_mat(cost));
+  std::shared_ptr<Graph> org_graph = std::shared_ptr<Graph>(init_from_cost_mat(cost));
   clock_t t_end = clock();
   long double parsing_time = t_end - t_start;
 
