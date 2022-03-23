@@ -6,19 +6,20 @@
 #define MUSSP_ABS(x) (((x) < 0) ? -x : x)
 
 Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_weight, double ex_weight) {
+  std::cout << "Graph initializer start" << std::endl;
 
-    num_nodes_ = num_nodes;
-    num_edges_ = num_edges;
-    src_id_ = src_id;
-    sink_id_ = sink_id;
-    en_weight_ = en_weight;
-    ex_weight_ = ex_weight;
-    precursor_queue_top_val = MUSSP_FINF;
+  num_nodes_ = num_nodes;
+  num_edges_ = num_edges;
+  src_id_ = src_id;
+  sink_id_ = sink_id;
+  en_weight_ = en_weight;
+  ex_weight_ = ex_weight;
+  precursor_queue_top_val = MUSSP_FINF;
 
-    V_ = std::vector<Node>(num_nodes);
-    for (int i = 0; i < num_nodes; i++) {// indeed this is not needed
-        V_[i].price = 0;
-    }
+  V_ = std::vector<Node>(num_nodes);
+  for (int i = 0; i < num_nodes; i++) {  // indeed this is not needed
+    V_[i].price = 0;
+  }
     parent_node_id.assign(num_nodes, 0);
     ancestor_node_id.assign(num_nodes, 0);
     distance2src.assign(num_nodes, MUSSP_FINF);
@@ -29,6 +30,8 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
     // data save ancestor information
     ancestor_ssd.assign(num_nodes, MUSSP_FINF);
     ancestors_descendants.resize(num_nodes);
+
+    std::cout << "Graph initializer end" << std::endl;
 }
 
 Node &Graph::get_node(int node_id) {
@@ -36,14 +39,16 @@ Node &Graph::get_node(int node_id) {
 }
 
 void Graph::add_edge(int tail_id, int head_id, int edge_id, double weight) {
+  std::cout << "add_edge:edge_tail_head.size():" << edge_tail_head.size() << std::endl;
 
-    V_[tail_id].add_successor(head_id, edge_id, weight);
-    V_[head_id].add_precursor(tail_id, edge_id, weight);
+  V_[tail_id].add_successor(head_id, edge_id, weight);
+  V_[head_id].add_precursor(tail_id, edge_id, weight);
 
-    // To format results into direct/reverse assignment
-    node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
-    node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
-    edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
+  // To format results into direct/reverse assignment
+  node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
+  node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
+  edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
+  std::cout << "add_edge end" << std::endl;
 }
 
 
