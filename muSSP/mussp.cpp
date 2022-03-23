@@ -254,7 +254,7 @@ int solve_muSSP(
   clock_t t_start = clock();
 
   // std::string inFileName = (argc > 1) ? argv[1] : "/home/congchao/Desktop/dev/muSSP/input_117982_193870.txt";
-  Graph * org_graph = init_from_cost_mat(cost);
+  std::shared_ptr<Graph> org_graph = std::make_shared<Graph>(init_from_cost_mat(cost));
   clock_t t_end = clock();
   long double parsing_time = t_end - t_start;
 
@@ -431,7 +431,8 @@ int solve_muSSP(
 
   // Get assignments
   convert_flow_to_assignment(
-    org_graph, path_set, cost.size(), cost.at(0).size(), direct_assignment, reverse_assignment);
+    org_graph.get(), path_set, cost.size(), cost.at(0).size(), direct_assignment,
+    reverse_assignment);
 
   return 0;
 }
