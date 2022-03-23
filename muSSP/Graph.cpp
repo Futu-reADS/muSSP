@@ -45,8 +45,6 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
     // data save ancestor information
     ancestor_ssd.assign(num_nodes, MUSSP_FINF);
     ancestors_descendants.resize(num_nodes);
-
-    time_test.resize(100, 0);
 }
 
 Node &Graph::get_node(int node_id) {
