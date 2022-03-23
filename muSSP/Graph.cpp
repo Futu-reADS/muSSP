@@ -16,6 +16,8 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
   ex_weight_ = ex_weight;
   precursor_queue_top_val = MUSSP_FINF;
 
+  std::cout << "initializer2" << num_edges << std::endl;
+
   V_ = std::vector<Node>(num_nodes);
   for (int i = 0; i < num_nodes; i++) {  // indeed this is not needed
     V_[i].price = 0;
@@ -25,7 +27,11 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
     distance2src.assign(num_nodes, MUSSP_FINF);
     sink_info = std::make_unique<Sink>(num_nodes, ex_weight);
 
+    std::cout << "initializer3" << num_edges << std::endl;
+
     node_in_visited.assign(num_edges, 0);
+
+    std::cout << "initializer4" << num_edges << std::endl;
 
     // data save ancestor information
     ancestor_ssd.assign(num_nodes, MUSSP_FINF);
