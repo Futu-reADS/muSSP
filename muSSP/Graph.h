@@ -37,6 +37,7 @@ public:
         double precursor_queue_top_val = 0;
         // for data validation
         std::vector<std::pair<int, int>> edge_tail_head;
+        size_t edge_tail_head_index = 0;
         std::vector<double> edge_org_weights;
         long upt_node_num = 0;
         //

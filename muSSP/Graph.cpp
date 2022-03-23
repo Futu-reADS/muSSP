@@ -31,6 +31,9 @@ Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_we
     ancestor_ssd.assign(num_nodes, MUSSP_FINF);
     ancestors_descendants.resize(num_nodes);
 
+    std::cout << "edge_tail_head" << std::endl;
+    edge_tail_head.assign(num_nodes, std::make_pair(0.0, 0.0));
+
     std::cout << "Graph initializer end" << std::endl;
 }
 
@@ -47,7 +50,13 @@ void Graph::add_edge(int tail_id, int head_id, int edge_id, double weight) {
   // To format results into direct/reverse assignment
   node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
   node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
-  edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
+  if (edge_tail_head.size() < edge_tail_head_index) {
+    std::cout << "edge input" << std::endl;
+    edge_tail_head.at(edge_tail_head_index) = std::make_pair(tail_id, head_id);
+  } else {
+    std::cout << "edge_emplace_back" << std::endl;
+    edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
+  }
   std::cout << "add_edge end" << std::endl;
 }
 
