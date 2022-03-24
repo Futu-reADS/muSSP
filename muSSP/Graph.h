@@ -33,7 +33,7 @@ public:
         }
         std::unordered_map<size_t, int> node_id2edge_id;
         std::vector<int> shortest_path;
-        std::unique_ptr<Sink> sink_info;
+        std::shared_ptr<Sink> sink_info;
         double precursor_queue_top_val = 0;
         // for data validation
         std::vector<std::pair<int, int>> edge_tail_head;
@@ -58,9 +58,12 @@ public:
         double cur_path_max_cost = 0;
         double cur_remain_max_distance = 0;
 
-        Graph() = default;
-        Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_weight, double ex_weight);
+        Graph();
         ~Graph();
+
+        void initialize(
+          int num_nodes, int num_edges, int src_id, int sink_id, double en_weight,
+          double ex_weight);
 
         Node &get_node(int pos);
 
