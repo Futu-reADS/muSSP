@@ -3,51 +3,50 @@
 /****shared macros****/
 #define MUSSP_MAX(x, y) ( ( (x) > (y) ) ?  x : y )
 #define MUSSP_MIN(x, y) ( ( (x) < (y) ) ? x : y )
-#define MUSSP_ABS(x) (((x) < 0) ? -x : x)
+#define MUSSP_ABS(x) ( ( (x) < 0 ) ? -x : x )
+#define REDUCED_EDGE_WEIGHTS(i, j, e) {\
+    edge_weights[e] += distance2src[i];\
+    edge_weights[e] -= distance2src[j];\
+}\
 
-Graph::Graph() {}
 
-void Graph::initialize(
-  int num_nodes, int num_edges, int src_id, int sink_id, double en_weight, double ex_weight)
-{
-  std::cout << "Graph initializer start" << std::endl;
 
-  num_nodes_ = num_nodes;
-  num_edges_ = num_edges;
-  src_id_ = src_id;
-  sink_id_ = sink_id;
-  en_weight_ = en_weight;
-  ex_weight_ = ex_weight;
-  precursor_queue_top_val = MUSSP_FINF;
+Graph::Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_weight, double ex_weight) {
 
-  std::cout << "num_edges" << num_edges << std::endl;
-  std::cout << "initializer2" << std::endl;
+    num_nodes_ = num_nodes;
+    num_edges_ = num_edges;
+    src_id_ = src_id;
+    sink_id_ = sink_id;
+    en_weight_ = en_weight;
+    ex_weight_ = ex_weight;
+    precursor_queue_top_val = MUSSP_FINF;
 
-  V_ = std::vector<Node>(num_nodes);
-  for (int i = 0; i < num_nodes; i++) {  // indeed this is not needed
-    V_[i].price = 0;
-  }
-  std::cout << "initializer3" << std::endl;
-  parent_node_id.assign(num_nodes, 0);
-  ancestor_node_id.assign(num_nodes, 0);
-  distance2src.assign(num_nodes, MUSSP_FINF);
-  std::cout << "initializer4" << std::endl;
-  sink_info = std::make_shared<Sink>(num_nodes, ex_weight);
+    V_ = std::vector<Node>(num_nodes);
+    for (int i = 0; i < num_nodes; i++) {// indeed this is not needed
+        V_[i].price = 0;
+    }
+    parent_node_id.assign(num_nodes, 0);
+    ancestor_node_id.assign(num_nodes, 0);
+    distance2src.assign(num_nodes, MUSSP_FINF);
+    sink_info = std::make_unique<Sink>(num_nodes, ex_weight);
 
-  std::cout << "initializer5" << std::endl;
+    node_visited.assign(num_nodes, false);
+    // this is used after building sst, so most nodes are visited already
+    /**** 0: visited,
+     * 1: not visited but in waitinglist,
+     * 2: not visited but not in waitinglist,
+     * 3: not visited and freshly labelled
+     * 4: not visited and possibly will never be used
+     * -1: not visitetd and permanently never be used
+    *****/
+    node_in_visited.assign(num_edges, 0);
+    edge_visited.assign(num_edges, false);
 
-  node_in_visited.assign(num_edges, 0);
+    // data save ancestor information
+    ancestor_ssd.assign(num_nodes, MUSSP_FINF);
+    ancestors_descendants.resize(num_nodes);
 
-  std::cout << "initializer6" << std::endl;
-
-  // data save ancestor information
-  ancestor_ssd.assign(num_nodes, MUSSP_FINF);
-  ancestors_descendants.resize(num_nodes);
-
-  std::cout << "edge_tail_head" << std::endl;
-  edge_tail_head.assign(num_edges, std::make_pair(0.0, 0.0));
-
-  std::cout << "Graph initializer end" << std::endl;
+    time_test.resize(100, 0);
 }
 
 Node &Graph::get_node(int node_id) {
@@ -55,23 +54,31 @@ Node &Graph::get_node(int node_id) {
 }
 
 void Graph::add_edge(int tail_id, int head_id, int edge_id, double weight) {
-  std::cout << "add_edge:edge_tail_head.size():" << edge_tail_head.size() << std::endl;
 
-  V_[tail_id].add_successor(head_id, edge_id, weight);
-  V_[head_id].add_precursor(tail_id, edge_id, weight);
+    V_[tail_id].add_successor(head_id, edge_id, weight);
+    V_[head_id].add_precursor(tail_id, edge_id, weight);
 
-  // To format results into direct/reverse assignment
-  node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
-  node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
-  if (edge_tail_head.size() > edge_tail_head_index) {
-    std::cout << "edge input" << std::endl;
-    edge_tail_head.at(edge_tail_head_index) = std::make_pair(tail_id, head_id);
-  } else {
-    std::cout << "edge_emplace_back" << std::endl;
+    // To format results into direct/reverse assignment
+    node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
+    node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
     edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
-  }
-  edge_tail_head_index++;
-  std::cout << "add_edge end" << std::endl;
+
+    if (false) {
+        /******
+         * for results validation only, no need to use in real application
+         * ********/
+        edge_weights.push_back(weight);
+        //// there will be no collisions for insertion, so complexity is O(1)
+        node_id2edge_id.insert({node_key(head_id, tail_id), edge_id});
+        node_id2edge_id.insert({node_key(tail_id, head_id), edge_id});
+
+        //// for results validation
+        edge_tail_head.emplace_back(std::make_pair(tail_id, head_id));
+        edge_org_weights.push_back(weight);
+
+        if (static_cast<int>(edge_weights.size()) - 1 != edge_id)
+            std::cout << "we got wrong edge number" << std::endl;
+    }
 }
 
 

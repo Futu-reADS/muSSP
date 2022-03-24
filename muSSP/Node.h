@@ -5,10 +5,10 @@ class Node
 {
 public:
     Node() = default;
-    ~Node();
-    // copy constructor
-    Node(const Node & node);
+//    int get_id() const;
 
+//    int node_id = 0;
+//    double shortest_path;
     std::vector<int> precursor_idx;
     std::vector<int> precursor_edges_idx;
     std::vector<double> precursor_edges_weights;

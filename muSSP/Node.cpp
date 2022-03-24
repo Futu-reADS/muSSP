@@ -5,19 +5,6 @@
 //    return node_id;
 //}
 
-Node::~Node() {}
-
-Node::Node(const Node & node)
-: precursor_idx(node.precursor_idx),
-  precursor_edges_idx(node.precursor_edges_idx),
-  precursor_edges_weights(node.precursor_edges_weights),
-  successor_idx(node.successor_idx),
-  successor_edges_idx(node.successor_edges_idx),
-  successor_edges_weights(node.successor_edges_weights),
-  price(node.price)
-{
-}
-
 void Node::add_precursor(int pre_id, int pre_edge_id, double weight) {
     this->precursor_idx.push_back(pre_id);
     this->precursor_edges_idx.push_back(pre_edge_id);

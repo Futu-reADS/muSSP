@@ -26,21 +26,24 @@ public:
         double en_weight_ = 0;
         double ex_weight_ = 0;
 
-        std::vector<Node> V_;  // save all nodes in the graph (precursor/successor/edge idx)
+        std::vector<long double> time_test;
+
+        std::vector<Node> V_; // save all nodes in the graph (precursor/successor/edge idx)
+        std::vector<double> edge_weights;
         static inline size_t node_key(int i,int j)
         {
             return (size_t) i << 32 | (unsigned int) j;
         }
         std::unordered_map<size_t, int> node_id2edge_id;
         std::vector<int> shortest_path;
-        std::shared_ptr<Sink> sink_info;
+        std::unique_ptr<Sink> sink_info;
         double precursor_queue_top_val = 0;
         // for data validation
         std::vector<std::pair<int, int>> edge_tail_head;
-        size_t edge_tail_head_index = 0;
         std::vector<double> edge_org_weights;
         long upt_node_num = 0;
         //
+        std::vector<bool> node_visited, edge_visited;
         std::vector<int> node_in_visited;
         std::vector<int> parent_node_id;
         std::vector<int> ancestor_node_id;
@@ -58,12 +61,9 @@ public:
         double cur_path_max_cost = 0;
         double cur_remain_max_distance = 0;
 
-        Graph();
+        Graph() = default;
+        Graph(int num_nodes, int num_edges, int src_id, int sink_id, double en_weight, double ex_weight);
         ~Graph();
-
-        void initialize(
-          int num_nodes, int num_edges, int src_id, int sink_id, double en_weight,
-          double ex_weight);
 
         Node &get_node(int pos);
 
